@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <title>CoinMarketCap</title>
+
+</head>
+<body>
+    <div class="page-header">
+        <h3>CoinMarketCap <small>Projeto DIO</small></h3>
+      </div>
+    
+    <div id = "coins">
+
+    </div>
+    <script type="text/javascript">
+        let apikey = {
+            key: "7bca6b47-f972-4379-8322-6da53aeaa2b4"
+        }
+
+        fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' 
+            + apikey.key)
+            .then((response) =>
+                {
+                    if(!response.ok) throw new Error("Erro ao executar a requisição,status  " + response.status);
+                    return response.json();
+                })
+                .then((api) => {
+                        this.GerarHtml(api);
+                        console.log(api);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        
+        function GerarHtml(api){
+            let texto = "";
+            for (let i =1; i<=10; i++){
+                texto = texto + `
+                    <div class ="media">
+                        <img src="coin.jpg" class= "align-self-center mr-3" alt="coin" width ="80" height="80">
+                        <div class="media-body">
+                            <h5 class = "mt-2">${api.data[i].name}</h5>
+                            <p>${api.data[i].symbol}</p>    
+                            <p>${new Date(api.data[i].first_historical_data).toLocaleDateString()}</p>  
+                        </div>
+                    </div>    
+                
+                `
+            }
+
+            document.getElementById("coins").innerHTML = texto;
+
+        }
+        
+    </script>
+</body>
+</html>
